@@ -11,9 +11,7 @@ const initialData = {
       title: "2020/08/28 のタスク",
       taskIds: ["task-1", "task-2", "task-3", "task-4"]
     }
-  },
-  //並び替えのため
-  columnOrder: ["column-1"]
+  }
 };
 
 export default initialData;

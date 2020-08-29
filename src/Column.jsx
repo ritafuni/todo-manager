@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Task from './Task';
+import SaveLoadButton from './SaveLoadButton';
 import {Droppable} from 'react-beautiful-dnd';
 
 const Container = styled.div`
@@ -23,7 +24,13 @@ const TaskList = styled.tbody`
 function Column(props){
   return (
     <Container>
-      <Title>{props.column.title}</Title>
+      <Title>
+        {props.column.title}
+      </Title>
+      <SaveLoadButton
+        saveFunc={props.saveFunc}
+        loadFunc={props.loadFunc}
+      />
       <table className="table">
         <thead>
           <tr>
