@@ -3,15 +3,11 @@ import styled from 'styled-components';
 import {Draggable} from 'react-beautiful-dnd';
 
 //>?で内部のスタイル指定ができる
-const Container = styled.div`
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-  padding: 8px;
-  margin-bottom: 8px;
-  background-color: white;
+const Container = styled.tr`
+  background-color: ${props => (props.isDragging ? "skyblue" : "white")};
 
-  > input {
-    margin-right: 10px;
+  > td > input {
+    margin-left: 5px;
     transform: scale(1.5);
   }
 `;
@@ -22,14 +18,17 @@ function Task(props){
       draggableId={props.task.id}
       index={props.index}
     >
-      {(provided) => (
+      {(provided, snapshot) => (
         <Container
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
+          isDragging={snapshot.isDragging}
         >
-          <input type="checkbox" className="task-checkbox" />
-          {props.task.content}
+            <td><input type="checkbox" className="task-checkbox" /></td>
+            <td>{props.task.content}</td>
+            <td>{props.task.category}</td>
+            <td>{props.task.taskType}</td>
         </Container>
       )}
     </Draggable>
