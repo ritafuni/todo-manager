@@ -5,6 +5,7 @@ const initialData = {
     "task-3": { id: "task-3", content: "スマホの充電", category: "家事", taskType: "Daily"},
     "task-4": { id: "task-4", content: "夕食調理", category: "家事", taskType: "Daily"}
   },
+  taskCount: 4,
   columns: {
     "column-1": {
       id: "column-1",

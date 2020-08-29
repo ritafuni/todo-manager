@@ -37,6 +37,7 @@ function Column(props){
             <th scope='col'>カテゴリ</th>
             <th scope='col'>タスク種</th>
             <th scope='col'>削除</th>
+            <th scope='col'>追加</th>
           </tr>
         </thead>
         <Droppable droppableId={props.column.id}>
@@ -45,7 +46,15 @@ function Column(props){
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {props.tasks.map((task, index) => <Task key={task.id} task={task} index={index} delFunc={props.delFunc}/>)}
+            {props.tasks.map((task, index) =>
+              <Task
+                key={task.id}
+                task={task}
+                index={index}
+                addFunc={props.addFunc}
+                delFunc={props.delFunc}
+              />
+            )}
             {provided.placeholder}
           </TaskList>
         )}

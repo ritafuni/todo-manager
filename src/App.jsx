@@ -3,10 +3,7 @@ import initialData from './initial-data';
 import Column from './Components/Column';
 import Menubar from './Components/Menubar';
 import { DragDropContext } from 'react-beautiful-dnd';
-import styled from 'styled-components';
-
-const Container = styled.div`
-`;
+// import styled from 'styled-components';
 
 function App(){
   const [state, changeState] = React.useState(initialData);
@@ -23,12 +20,41 @@ function App(){
     changeState(json);
   }
 
+  function AddTask(index){
+    //add taskCount
+    const newTaskCount = state.taskCount + 1;
+
+    //add task
+    const newTaskId = 'task-' + newTaskCount.toString();
+    const newTasks = {
+      ...state.tasks,
+      [newTaskId]: { id: newTaskId, content: '-', category: '-', taskType: '-'}
+    }
+
+    //update taskId array
+    const columnId = 'column-1';
+    const newTaskIds = Array.from(state.columns[columnId].taskIds);
+    newTaskIds.splice(index + 1, 0, newTaskId);
+    const newColumn = {
+      ...state.columns[columnId],
+      taskIds: newTaskIds
+    }
+
+    //update state
+    changeState({
+      tasks: newTasks,
+      taskCount: newTaskCount,
+      columns: {
+        ...state.columns,
+        [newColumn.id]: newColumn
+      }
+    });
+  }
+
   function DeleteTask(index){
-    console.log(index);
     const columnId = 'column-1';
     const newTaskIds = Array.from(state.columns[columnId].taskIds);
     newTaskIds.splice(index, 1);
-
     const newColumn = {
       ...state.columns[columnId],
       taskIds: newTaskIds
@@ -57,7 +83,7 @@ function App(){
       return;
     }
 
-    //reorder(columnが複数ある場合も想定されているのでリファクタ可)
+    //reorder
     const column = state.columns[source.droppableId];
     const newTaskIds = Array.from(column.taskIds);
     //delete source id
@@ -83,7 +109,7 @@ function App(){
   const column = state.columns[loadColumn];
   const tasks = state.columns[loadColumn].taskIds.map(taskId => state.tasks[taskId]);
   return (
-    <Container>
+    <div>
       <Menubar
         saveFunc={SaveJSON}
         loadFunc={LoadJSON}
@@ -93,10 +119,11 @@ function App(){
           key={state.columns["column-1"].id}
           column={column}
           tasks={tasks}
+          addFunc={AddTask}
           delFunc={DeleteTask}
         />
       </DragDropContext>
-    </Container>
+    </div>
   );
 }
 

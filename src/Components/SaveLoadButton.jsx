@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ButtonRow = styled.div`
-  margin: 8px;
+  margin-left: 8px;
 
   > button {
     margin: 0 8px 0 8px;

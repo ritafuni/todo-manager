@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {Draggable} from 'react-beautiful-dnd';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 //>?で内部のスタイル指定ができる
 const Container = styled.tr`
@@ -37,6 +38,11 @@ function Task(props){
           <td>
             <button className='btn' onClick = {() => props.delFunc(props.index)}>
               <DeleteForeverIcon />
+            </button>
+          </td>
+          <td>
+            <button className='btn' onClick = {() => props.addFunc(props.index)}>
+              <AddBoxIcon />
             </button>
           </td>
         </Container>
