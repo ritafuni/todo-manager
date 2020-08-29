@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Draggable} from 'react-beautiful-dnd';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 //>?で内部のスタイル指定ができる
 const Container = styled.tr`
-  background-color: ${props => (props.isDragging ? "skyblue" : "white")};
+  background-color: ${props => (props.isDragging ? 'skyblue' : 'white')};
 
   > td > input {
     margin-left: 5px;
     transform: scale(1.5);
+  }
+
+  > td > button {
+    padding: 0;
   }
 `;
 
@@ -25,10 +30,15 @@ function Task(props){
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
         >
-            <td><input type="checkbox" className="task-checkbox" /></td>
-            <td>{props.task.content}</td>
-            <td>{props.task.category}</td>
-            <td>{props.task.taskType}</td>
+          <td><input type='checkbox' className='task-checkbox' /></td>
+          <td>{props.task.content}</td>
+          <td>{props.task.category}</td>
+          <td>{props.task.taskType}</td>
+          <td>
+            <button className='btn' onClick = {() => props.delFunc(props.index)}>
+              <DeleteForeverIcon />
+            </button>
+          </td>
         </Container>
       )}
     </Draggable>

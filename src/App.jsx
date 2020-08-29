@@ -1,7 +1,7 @@
 import React from 'react';
 import initialData from './initial-data';
-import Column from './Column';
-import Menubar from './Menubar';
+import Column from './Components/Column';
+import Menubar from './Components/Menubar';
 import { DragDropContext } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 
@@ -23,6 +23,27 @@ function App(){
     changeState(json);
   }
 
+  function DeleteTask(index){
+    console.log(index);
+    const columnId = 'column-1';
+    const newTaskIds = Array.from(state.columns[columnId].taskIds);
+    newTaskIds.splice(index, 1);
+
+    const newColumn = {
+      ...state.columns[columnId],
+      taskIds: newTaskIds
+    }
+
+    changeState({
+      ...state,
+      columns: {
+        ...state.columns,
+        //[]で囲むことによって、:の左側にも値が代入できる
+        [newColumn.id]: newColumn
+      }
+    });
+  }
+
   //resultに結果が入ってくる
   function onDragEnd(result){
     const {draggableId, source, destination} = result;
@@ -36,17 +57,15 @@ function App(){
       return;
     }
 
-    //reorder
-    const startColumn = state.columns[source.droppableId];
-    const finishColumn = state.columns[destination.droppableId];
-
-    const newTaskIds = Array.from(startColumn.taskIds);
+    //reorder(columnが複数ある場合も想定されているのでリファクタ可)
+    const column = state.columns[source.droppableId];
+    const newTaskIds = Array.from(column.taskIds);
     //delete source id
     newTaskIds.splice(source.index, 1);
+    //add to destination
     newTaskIds.splice(destination.index, 0, draggableId);
-
     const newColumn = {
-      ...startColumn,
+      ...column,
       taskIds: newTaskIds
     }
 
@@ -74,6 +93,7 @@ function App(){
           key={state.columns["column-1"].id}
           column={column}
           tasks={tasks}
+          delFunc={DeleteTask}
         />
       </DragDropContext>
     </Container>

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Task from './Task';
-import SaveLoadButton from './SaveLoadButton';
 import {Droppable} from 'react-beautiful-dnd';
 
 const Container = styled.div`
@@ -10,8 +9,12 @@ const Container = styled.div`
   border-radius: 2px;
   display: flex;
   flex-direction: column;
+
+  > table {
+    margin-bottom: 1px;
+  }
 `;
-const Title = styled.h3`
+const Title = styled.h4`
   padding: 8px;
 `;
 const TaskList = styled.tbody`
@@ -33,6 +36,7 @@ function Column(props){
             <th scope='col'>タスク名</th>
             <th scope='col'>カテゴリ</th>
             <th scope='col'>タスク種</th>
+            <th scope='col'>削除</th>
           </tr>
         </thead>
         <Droppable droppableId={props.column.id}>
@@ -41,7 +45,7 @@ function Column(props){
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {props.tasks.map((task, index) => <Task key={task.id} task={task} index={index} />)}
+            {props.tasks.map((task, index) => <Task key={task.id} task={task} index={index} delFunc={props.delFunc}/>)}
             {provided.placeholder}
           </TaskList>
         )}
