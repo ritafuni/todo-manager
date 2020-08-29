@@ -1,11 +1,11 @@
 import React from 'react';
-import initialData from "./initial-data";
-import Column from "./Column";
+import initialData from './initial-data';
+import Column from './Column';
+import Menubar from './Menubar';
 import { DragDropContext } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  display: flex;
 `;
 
 function App(){
@@ -64,17 +64,19 @@ function App(){
   const column = state.columns[loadColumn];
   const tasks = state.columns[loadColumn].taskIds.map(taskId => state.tasks[taskId]);
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Container>
-          <Column
-            key={state.columns["column-1"].id}
-            column={column}
-            tasks={tasks}
-            saveFunc={SaveJSON}
-            loadFunc={LoadJSON}
-          />
-      </Container>
-    </DragDropContext>
+    <Container>
+      <Menubar
+        saveFunc={SaveJSON}
+        loadFunc={LoadJSON}
+      />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Column
+          key={state.columns["column-1"].id}
+          column={column}
+          tasks={tasks}
+        />
+      </DragDropContext>
+    </Container>
   );
 }
 
