@@ -72,11 +72,31 @@ function App(){
     });
   }
 
-  function EditTaskName(value, index){
-    const newTask = {
-      ...state.tasks[index],
-      content: value
-    };
+  function EditTask(value, index, type){
+    let newTask;
+    switch(type){
+      case 'content':
+        newTask = {
+          ...state.tasks[index],
+          content: value
+        };
+        break;
+      case 'category':
+        newTask = {
+          ...state.tasks[index],
+          category: value
+        };
+        break;
+      case 'taskType':
+        newTask = {
+          ...state.tasks[index],
+          taskType: value
+        };
+        break;
+      default:
+        break;
+    }
+
     changeState({
       ...state,
       tasks: {
@@ -84,7 +104,6 @@ function App(){
         [index]: newTask
       }
     });
-    console.log(state);
   }
 
   //resultに結果が入ってくる
@@ -138,7 +157,7 @@ function App(){
           tasks={tasks}
           addFunc={AddTask}
           delFunc={DeleteTask}
-          changeTaskNameFunc={EditTaskName}
+          editFunc={EditTask}
         />
       </DragDropContext>
     </div>
