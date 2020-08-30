@@ -33,7 +33,7 @@ function Task(props){
           isDragging={snapshot.isDragging}
         >
           <td><input type='checkbox' className='task-checkbox' /></td>
-          <td><Input defaultValue={props.task.content} onChange={(event) => props.changeTaskNameFunc(event.target.value, props.task.id)} /></td>
+          <td><Input value={props.task.content} onChange={(event) => props.changeTaskNameFunc(event.target.value, props.task.id)} /></td>
           <td>{props.task.category}</td>
           <td>{props.task.taskType}</td>
           <td>
