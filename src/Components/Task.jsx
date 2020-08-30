@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Draggable} from 'react-beautiful-dnd';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import Input from '@material-ui/core/Input';
 
 //>?で内部のスタイル指定ができる
 const Container = styled.tr`
@@ -32,7 +33,7 @@ function Task(props){
           isDragging={snapshot.isDragging}
         >
           <td><input type='checkbox' className='task-checkbox' /></td>
-          <td>{props.task.content}</td>
+          <td><Input defaultValue={props.task.content} onChange={(event) => props.changeTaskNameFunc(event.target.value, props.task.id)} /></td>
           <td>{props.task.category}</td>
           <td>{props.task.taskType}</td>
           <td>

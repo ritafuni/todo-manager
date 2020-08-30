@@ -17,7 +17,9 @@ function App(){
   function LoadJSON(){
     const storeData = window.localStorage.getItem(LOCALSTORAGE_KEY);
     const json = storeData ? JSON.parse(storeData) : initialData;
-    changeState(json);
+    changeState(
+      json
+    );
   }
 
   function AddTask(index){
@@ -68,6 +70,21 @@ function App(){
         [newColumn.id]: newColumn
       }
     });
+  }
+
+  function EditTaskName(value, index){
+    const newTask = {
+      ...state.tasks[index],
+      content: value
+    };
+    changeState({
+      ...state,
+      tasks: {
+        ...state.tasks,
+        [index]: newTask
+      }
+    });
+    console.log(state);
   }
 
   //resultに結果が入ってくる
@@ -121,6 +138,7 @@ function App(){
           tasks={tasks}
           addFunc={AddTask}
           delFunc={DeleteTask}
+          changeTaskNameFunc={EditTaskName}
         />
       </DragDropContext>
     </div>

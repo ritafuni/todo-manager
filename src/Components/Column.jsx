@@ -53,6 +53,7 @@ function Column(props){
                 index={index}
                 addFunc={props.addFunc}
                 delFunc={props.delFunc}
+                changeTaskNameFunc={props.changeTaskNameFunc}
               />
             )}
             {provided.placeholder}
