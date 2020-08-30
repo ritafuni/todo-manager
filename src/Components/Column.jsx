@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import Task from './Task';
 import {Droppable} from 'react-beautiful-dnd';
+import { drawerWidth } from './Sidebar';
 
 const Container = styled.div`
-  margin: 8px;
+  margin-left: ${drawerWidth}px;
   border: 1px solid lightgrey;
   border-radius: 2px;
   display: flex;

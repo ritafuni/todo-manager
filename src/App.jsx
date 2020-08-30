@@ -2,6 +2,7 @@ import React from 'react';
 import initialData from './initial-data';
 import Column from './Components/Column';
 import Menubar from './Components/Menubar';
+import Sidebar from './Components/Sidebar';
 import { DragDropContext } from 'react-beautiful-dnd';
 // import styled from 'styled-components';
 
@@ -150,6 +151,7 @@ function App(){
         saveFunc={SaveJSON}
         loadFunc={LoadJSON}
       />
+      <Sidebar />
       <DragDropContext onDragEnd={onDragEnd}>
         <Column
           key={state.columns["column-1"].id}
