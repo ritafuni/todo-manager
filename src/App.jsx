@@ -30,7 +30,7 @@ function App(){
     const newTaskId = 'task-' + newTaskCount.toString();
     const newTasks = {
       ...state.tasks,
-      [newTaskId]: { id: newTaskId, content: '-', category: '-', taskType: '-'}
+      [newTaskId]: { id: newTaskId, content: '', category: '仕事', taskType: '毎日'}
     }
 
     //update taskId array
