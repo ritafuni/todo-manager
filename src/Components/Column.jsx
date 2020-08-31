@@ -5,7 +5,7 @@ import {Droppable} from 'react-beautiful-dnd';
 import { drawerWidth } from './Sidebar';
 
 const Container = styled.div`
-  margin-left: ${drawerWidth}px;
+  margin-left: ${props => props.drawerOpen ? drawerWidth : 0}px;
   border: 1px solid lightgrey;
   border-radius: 2px;
   display: flex;
@@ -15,18 +15,20 @@ const Container = styled.div`
     margin-bottom: 1px;
   }
 `;
-const Title = styled.h4`
-  padding: 8px;
-`;
+
 const TaskList = styled.tbody`
   padding: 8px;
   flex-grow: 1;
   min-height: 100px;
 `;
 
+const Title = styled.h4`
+  padding: 8px;
+`;
+
 function Column(props){
   return (
-    <Container>
+    <Container drawerOpen={props.drawerOpen}>
       <Title>
         {props.column.title}
       </Title>

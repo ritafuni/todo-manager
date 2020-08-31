@@ -7,7 +7,10 @@ import { DragDropContext } from 'react-beautiful-dnd';
 // import styled from 'styled-components';
 
 function App(){
+  //state: TODO data
   const [state, changeState] = React.useState(initialData);
+  //drawer open
+  const [drawerOpen, changeDrawerState] = React.useState(false);
   const LOCALSTORAGE_KEY = 'TODO-Manager';
 
   function SaveJSON(){
@@ -21,6 +24,11 @@ function App(){
     changeState(
       json
     );
+  }
+
+  function ToggleDrawer(){
+    console.log("toggle")
+    changeDrawerState(!drawerOpen);
   }
 
   function AddTask(index){
@@ -150,8 +158,13 @@ function App(){
       <Menubar
         saveFunc={SaveJSON}
         loadFunc={LoadJSON}
+        drawerOpen={drawerOpen}
+        toggleDrawer={ToggleDrawer}
       />
-      <Sidebar />
+      <Sidebar
+        drawerOpen={drawerOpen}
+        toggleDrawer={ToggleDrawer}
+      />
       <DragDropContext onDragEnd={onDragEnd}>
         <Column
           key={state.columns["column-1"].id}
@@ -160,6 +173,7 @@ function App(){
           addFunc={AddTask}
           delFunc={DeleteTask}
           editFunc={EditTask}
+          drawerOpen={drawerOpen}
         />
       </DragDropContext>
     </div>
