@@ -5,9 +5,18 @@ import { drawerWidth } from './Sidebar';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 
 const CustomNav = styled.nav`
-  margin-left: ${props => props.drawerOpen ? drawerWidth : 0}px;
-  /* transition: transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms; */
-  /* transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; */
+  /* drawer-open class */
+  &.drawer-open {
+    transform: translateX(${drawerWidth}px);
+    transition: 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    width: calc(100% - ${drawerWidth}px);
+  }
+  /* drawer-close class */
+  &.drawer-close {
+    transform: translateX(0px);
+    transition: 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    width: 100%;
+  }
 `;
 
 const MenuOpenButton = styled.button`
@@ -21,7 +30,10 @@ margin-left: 10px;
 function Menubar(props){
   return(
     <CustomNav
-      className='navbar navbar-expand-lg bg-primary text-light'
+      className={
+        'navbar navbar-expand-lg bg-primary text-light '
+        + (props.drawerOpen ? 'drawer-open' : 'drawer-close')
+      }
       drawerOpen={props.drawerOpen}
     >
       <MenuOpenButton
