@@ -10,7 +10,7 @@ function App(){
   //state: TODO data
   const [state, changeState] = React.useState(initialData);
   //drawer open
-  const [drawerOpen, changeDrawerState] = React.useState(false);
+  const [drawerOpen, changeDrawerState] = React.useState(true);
   const LOCALSTORAGE_KEY = 'TODO-Manager';
 
   function SaveJSON(){
