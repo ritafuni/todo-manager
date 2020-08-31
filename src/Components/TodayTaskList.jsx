@@ -6,8 +6,6 @@ import { drawerWidth } from './Sidebar';
 
 const Container = styled.div`
   margin-left: ${props => props.drawerOpen ? drawerWidth : 0}px;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
   display: flex;
   flex-direction: column;
 
@@ -26,7 +24,7 @@ const Title = styled.h4`
   padding: 8px;
 `;
 
-function Column(props){
+function TodayTaskList(props){
   return (
     <Container drawerOpen={props.drawerOpen}>
       <Title>
@@ -68,4 +66,4 @@ function Column(props){
   );
 }
 
-export default Column;
+export default TodayTaskList;

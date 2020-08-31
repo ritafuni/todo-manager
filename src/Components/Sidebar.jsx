@@ -50,14 +50,14 @@ function Sidebar(props){
       <CloseButton className='btn btn-primary' onClick={props.toggleDrawer}>
         <div>Menu</div><DoubleArrowIcon />
       </CloseButton>
-      <MenuButton className='btn btn-primary'>
+      <MenuButton className='btn btn-primary' onClick={() => props.changePage("today-task")}>
         <AssignmentIcon /><div>今日のタスク</div>
       </MenuButton>
-      <MenuButton className='btn btn-primary'>
+      <MenuButton className='btn btn-primary' onClick={() => props.changePage("routines")}>
         <AssignmentIcon /><div>ルーチンタスク</div>
       </MenuButton>
-      <MenuButton className='btn btn-primary'>
-        <AssignmentIcon /><div>非ルーチンタスク</div>
+      <MenuButton className='btn btn-primary' onClick={() => props.changePage("deadline-task")}>
+        <AssignmentIcon /><div>期限付きタスク</div>
       </MenuButton>
     </CustomDrawer>
   );

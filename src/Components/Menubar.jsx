@@ -25,7 +25,7 @@ function Menubar(props){
       drawerOpen={props.drawerOpen}
     >
       <MenuOpenButton
-        className='btn'
+        className='btn btn-primary'
         onClick={props.toggleDrawer}
         drawerOpen={props.drawerOpen}
       >

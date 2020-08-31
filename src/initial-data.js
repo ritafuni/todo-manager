@@ -1,4 +1,4 @@
-const initialData = {
+export const initialTasks = {
   tasks: {
     "task-1": { id: "task-1", content: "ゴミ捨て", category: "家事", taskType: "毎週"},
     "task-2": { id: "task-2", content: "TVを見る", category: "趣味", taskType: "不定期"},
@@ -15,4 +15,6 @@ const initialData = {
   }
 };
 
-export default initialData;
+export const initialRoutines = {
+
+};

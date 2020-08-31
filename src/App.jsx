@@ -1,6 +1,8 @@
 import React from 'react';
-import initialData from './initial-data';
-import Column from './Components/Column';
+import { initialTasks } from './initial-data';
+import TodayTaskList from './Components/TodayTaskList';
+import Routines from './Components/Routines';
+import DeadlineTasks from './Components/DeadlineTasks';
 import Menubar from './Components/Menubar';
 import Sidebar from './Components/Sidebar';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -8,9 +10,11 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 function App(){
   //state: TODO data
-  const [state, changeState] = React.useState(initialData);
+  const [state, changeState] = React.useState(initialTasks);
   //drawer open
   const [drawerOpen, changeDrawerState] = React.useState(true);
+  //page state
+  const [pageState, changePageState] = React.useState("today-task");
   const LOCALSTORAGE_KEY = 'TODO-Manager';
 
   function SaveJSON(){
@@ -20,14 +24,13 @@ function App(){
 
   function LoadJSON(){
     const storeData = window.localStorage.getItem(LOCALSTORAGE_KEY);
-    const json = storeData ? JSON.parse(storeData) : initialData;
+    const json = storeData ? JSON.parse(storeData) : initialTasks;
     changeState(
       json
     );
   }
 
   function ToggleDrawer(){
-    console.log("toggle")
     changeDrawerState(!drawerOpen);
   }
 
@@ -115,6 +118,10 @@ function App(){
     });
   }
 
+  function ChangePage(page){
+    changePageState(page);
+  }
+
   //resultに結果が入ってくる
   function onDragEnd(result){
     const {draggableId, source, destination} = result;
@@ -150,7 +157,7 @@ function App(){
     });
   }
 
-  const loadColumn = "column-1";
+  const loadColumn = 'column-1';
   const column = state.columns[loadColumn];
   const tasks = state.columns[loadColumn].taskIds.map(taskId => state.tasks[taskId]);
   return (
@@ -164,17 +171,29 @@ function App(){
       <Sidebar
         drawerOpen={drawerOpen}
         toggleDrawer={ToggleDrawer}
+        changePage={ChangePage}
       />
       <DragDropContext onDragEnd={onDragEnd}>
-        <Column
-          key={state.columns["column-1"].id}
-          column={column}
-          tasks={tasks}
-          addFunc={AddTask}
-          delFunc={DeleteTask}
-          editFunc={EditTask}
-          drawerOpen={drawerOpen}
-        />
+        {
+          (pageState === 'today-task') &&
+          <TodayTaskList
+            key={state.columns['column-1'].id}
+            column={column}
+            tasks={tasks}
+            addFunc={AddTask}
+            delFunc={DeleteTask}
+            editFunc={EditTask}
+            drawerOpen={drawerOpen}
+          />
+        }
+        {
+          (pageState === 'routines') &&
+          <Routines drawerOpen={drawerOpen} />
+        }
+        {
+          (pageState === 'deadline-task') &&
+          <DeadlineTasks drawerOpen={drawerOpen} />
+        }
       </DragDropContext>
     </div>
   );
