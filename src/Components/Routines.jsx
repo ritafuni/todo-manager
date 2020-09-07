@@ -31,13 +31,38 @@ const Container = styled.div`
 
 const ControlLabelDiv = styled.div`
   display: flex;
+
+  > p {
+    padding-top: 4px;
+  }
 `;
 
 const CustomFormControlLabel = styled(FormControlLabel)`
-  margin-bottom: 0;
   > span {
     padding: 2px;
   }
+`;
+
+const CustomTextField = styled(TextField)`
+
+  > div > input {
+    padding: 7px;
+    padding-bottom: 9px;
+    width: 50px;
+  }
+  > div > fieldset > legend {
+    height: 1px;
+  }
+`;
+
+const HiddenFormLabel = styled(FormLabel)`
+  visibility: hidden;
+  margin-bottom: 12px;
+`;
+
+const MonthTextAdd = styled.div`
+  padding-left: 5px;
+  padding-top: 5px;
 `;
 
 const RadioGrid = styled(Grid)`
@@ -110,17 +135,18 @@ function Routines(props){
             } />
             </RadioGroup>
           </Grid>
-          <Grid container item xs={2} spacing={0} alignContent="flex-start">
+          <Grid container item xs={3} spacing={0} alignContent="flex-start">
             <FormLabel component="legend">月</FormLabel>
             <RadioGroup aria-label="month" name="month" value={routine.type} onChange={(event) => ChangeRoutine(event.target.value, '', '', '', '')}>
               <CustomFormControlLabel value="selected-day" control={<Radio />} label={
                 <ControlLabelDiv>
-                  <TextField id="outlined-basic" label="指定日" variant="outlined" value={routine.monthDay} onChange={(event) => ChangeRoutine('selected-day', '', event.target.value, '', '')} />
-                  <div>日</div>
+                  <CustomTextField id="outlined-basic" placeholder="指定日" variant="outlined" value={routine.monthDay} onChange={(event) => ChangeRoutine('selected-day', '', event.target.value, '', '')} />
+                  <MonthTextAdd>日</MonthTextAdd>
                 </ControlLabelDiv>
               } />
               <CustomFormControlLabel value="selected-day-of-week" control={<Radio />} label={
                 <ControlLabelDiv>
+                <FormHelperText>第何</FormHelperText>
                   <Select
                     value={routine.monthWeekNum}
                     onChange={(event) => ChangeRoutine('selected-day-of-week', '', '', event.target.value, routine.monthDOW)}
@@ -131,7 +157,7 @@ function Routines(props){
                     <MenuItem value='第四'>第四</MenuItem>
                     <MenuItem value='最終'>最終</MenuItem>
                   </Select>
-                  <FormHelperText>第何</FormHelperText>
+                  <FormHelperText>曜日</FormHelperText>
                   <Select
                     value={routine.monthDOW}
                     onChange={(event) => ChangeRoutine('selected-day-of-week', '', '', routine.monthWeekNum, event.target.value)}
@@ -144,9 +170,14 @@ function Routines(props){
                     <MenuItem value='土'>土曜日</MenuItem>
                     <MenuItem value='日'>日曜日</MenuItem>
                   </Select>
-                  <FormHelperText>曜日</FormHelperText>
                 </ControlLabelDiv>
               } />
+
+            </RadioGroup>
+          </Grid>
+          <Grid container item xs={2} spacing={0} alignContent="flex-start">
+            <HiddenFormLabel component="legend">月</HiddenFormLabel>
+            <RadioGroup aria-label="month" name="month" value={routine.type} onChange={(event) => ChangeRoutine(event.target.value, '', '', '', '')}>
               <CustomFormControlLabel value="last-weekday" control={<Radio />} label="最終平日" />
               <CustomFormControlLabel value="last-day" control={<Radio />} label="最終日" />
             </RadioGroup>
