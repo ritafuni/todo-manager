@@ -83,16 +83,14 @@ function Routines(props){
   };
   const [routine, setRoutine] = React.useState(initRoutine);
 
-  function ChangeRoutine(typeIn, weekDOWIn, monthDayIn, monthWeekNumIn, monthDOWIn){
-    // setRoutine({event.target.value});
+  function ChangeRoutine(newRoutine){
     //DOW...Day of Week
-    setRoutine({
-      type: typeIn,
-      weekDOW: weekDOWIn,
-      monthDay: monthDayIn,
-      monthWeekNum: monthWeekNumIn,
-      monthDOW: monthDOWIn
-    });
+    setRoutine(
+      {
+        ...initRoutine,
+        ...newRoutine
+      }
+    );
     console.log(routine);
   }
 
@@ -108,19 +106,31 @@ function Routines(props){
         <RadioGrid container spacing={0}>
           <Grid container item xs={2} spacing={0} alignContent="flex-start">
             <FormLabel component="legend">日</FormLabel>
-            <RadioGroup aria-label="day" name="day" value={routine.type} onChange={(event) => ChangeRoutine(event.target.value, '', '', '', '')}>
+            <RadioGroup aria-label="day" name="day" value={routine.type}
+              onChange={(event) => ChangeRoutine({
+                type: event.target.value,
+              })}
+            >
               <CustomFormControlLabel value="everyday" control={<Radio />} label="毎日" />
               <CustomFormControlLabel value="weekday" control={<Radio />} label="平日" />
             </RadioGroup>
           </Grid>
           <Grid container item xs={2} spacing={0} alignContent="flex-start">
             <FormLabel component="legend">週</FormLabel>
-            <RadioGroup aria-label="week" name="week" value={routine.type} onChange={(event) => ChangeRoutine(event.target.value, '', '', '', '')}>
+            <RadioGroup aria-label="week" name="week" value={routine.type}
+              onChange={(event) => ChangeRoutine({
+                type: event.target.value
+              })}
+            >
             <CustomFormControlLabel value="every-day-of-week" control={<Radio />} label={
               <ControlLabelDiv>
+                <FormHelperText>曜日</FormHelperText>
                 <Select
                   value={routine.weekDOW}
-                  onChange={(event) => ChangeRoutine('every-day-of-week', event.target.value, '', '', '')}
+                  onChange={(event) => ChangeRoutine({
+                    type: 'every-day-of-week',
+                    weekDOW: event.target.value
+                  })}
                 >
                   <MenuItem value='月'>月曜日</MenuItem>
                   <MenuItem value='火'>火曜日</MenuItem>
@@ -130,17 +140,25 @@ function Routines(props){
                   <MenuItem value='土'>土曜日</MenuItem>
                   <MenuItem value='日'>日曜日</MenuItem>
                 </Select>
-                <FormHelperText>曜日</FormHelperText>
               </ControlLabelDiv>
             } />
             </RadioGroup>
           </Grid>
           <Grid container item xs={3} spacing={0} alignContent="flex-start">
             <FormLabel component="legend">月</FormLabel>
-            <RadioGroup aria-label="month" name="month" value={routine.type} onChange={(event) => ChangeRoutine(event.target.value, '', '', '', '')}>
+            <RadioGroup aria-label="month" name="month" value={routine.type}
+              onChange={(event) => ChangeRoutine({
+                type: event.target.value
+              })}
+            >
               <CustomFormControlLabel value="selected-day" control={<Radio />} label={
                 <ControlLabelDiv>
-                  <CustomTextField id="outlined-basic" placeholder="指定日" variant="outlined" value={routine.monthDay} onChange={(event) => ChangeRoutine('selected-day', '', event.target.value, '', '')} />
+                  <CustomTextField id="outlined-basic" placeholder="指定日" variant="outlined" value={routine.monthDay}
+                    onChange={(event) => ChangeRoutine({
+                      type: 'selected-day',
+                      monthDay: event.target.value
+                    })}
+                  />
                   <MonthTextAdd>日</MonthTextAdd>
                 </ControlLabelDiv>
               } />
@@ -149,7 +167,11 @@ function Routines(props){
                 <FormHelperText>第何</FormHelperText>
                   <Select
                     value={routine.monthWeekNum}
-                    onChange={(event) => ChangeRoutine('selected-day-of-week', '', '', event.target.value, routine.monthDOW)}
+                    onChange={(event) => ChangeRoutine({
+                      type: 'selected-day-of-week',
+                      monthWeekNum: event.target.value,
+                      monthDOW: routine.monthDOW
+                    })}
                   >
                     <MenuItem value='第一'>第一</MenuItem>
                     <MenuItem value='第二'>第二</MenuItem>
@@ -160,7 +182,11 @@ function Routines(props){
                   <FormHelperText>曜日</FormHelperText>
                   <Select
                     value={routine.monthDOW}
-                    onChange={(event) => ChangeRoutine('selected-day-of-week', '', '', routine.monthWeekNum, event.target.value)}
+                    onChange={(event) => ChangeRoutine({
+                      type: 'selected-day-of-week',
+                      monthWeekNum: routine.monthWeekNum,
+                      monthDOW: event.target.value
+                    })}
                   >
                     <MenuItem value='月'>月曜日</MenuItem>
                     <MenuItem value='火'>火曜日</MenuItem>
@@ -177,7 +203,11 @@ function Routines(props){
           </Grid>
           <Grid container item xs={2} spacing={0} alignContent="flex-start">
             <HiddenFormLabel component="legend">月</HiddenFormLabel>
-            <RadioGroup aria-label="month" name="month" value={routine.type} onChange={(event) => ChangeRoutine(event.target.value, '', '', '', '')}>
+            <RadioGroup aria-label="month" name="month" value={routine.type}
+              onChange={(event) => ChangeRoutine({
+                type: event.target.value
+              })}
+            >
               <CustomFormControlLabel value="last-weekday" control={<Radio />} label="最終平日" />
               <CustomFormControlLabel value="last-day" control={<Radio />} label="最終日" />
             </RadioGroup>
