@@ -11,6 +11,36 @@ import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Paper from '@material-ui/core/Paper';
+
+const CalendarDayPaper = styled(Paper)`
+  background-color: ${props => {
+    let selected = false;
+    props.selectedday.forEach(day => {
+      if(day === props.daynum){
+        selected = true;
+      }
+    });
+    return selected ? "#ffb7d1" : "#ffffff";
+  }};
+  transition: 225ms;
+  height: 60px;
+  text-align: center;
+  width: 100px;
+`;
+
+const CalendarGrid = styled(Grid)`
+  /* flex-grow: 1; */
+  margin: 10px;
+`;
+
+const CalendarHeadPaper = styled(Paper)`
+  background-color: #444;
+  color: #fff;
+  height: 30px;
+  text-align: center;
+  width: 100px;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -88,9 +118,11 @@ function Routines(props){
     weekDOW: '',
     monthDay: '',
     monthWeekNum: '',
-    monthDOW: ''
+    monthDOW: '',
   };
   const [routine, setRoutine] = React.useState(initRoutine);
+
+  const calendarHeadArray = ['日', '月', '火', '水', '木', '金', '土'];
 
   function ChangeRoutine(newRoutine){
     //DOW...Day of Week
@@ -101,6 +133,41 @@ function Routines(props){
       }
     );
     console.log(routine);
+  }
+
+  function GetSelectedDay(){
+    //get selected day from routine
+    const monthArray = [...Array(28)].map((ele, idx) => idx + 1);
+    let patternArray;
+    let lastWeekArray = [31, -1, -2, -3, -4, 29, 30];
+    switch(routine.type){
+      case 'everyday':
+        return [...monthArray, -1, -2, -3, -4, 29, 30, 31];
+      case 'weekday':
+        patternArray = monthArray.filter(day =>
+          (day % 7 !== 0) && (day % 7 !== 1)
+        );
+        return [...patternArray, -2, -3, -4, 29, 30]
+      case 'every-day-of-week':
+        patternArray = monthArray.filter(day =>
+          day % 7 === routine.weekDOW
+        );
+        return [...patternArray, lastWeekArray[routine.weekDOW]];
+      case 'selected-day':
+        return monthArray.filter(day => day === Number(routine.monthDay));
+      case 'selected-day-of-week':
+        patternArray = monthArray.filter(day =>
+          (Math.ceil(day / 7) === routine.monthWeekNum) && (day % 7 === routine.monthDOW)
+        );
+        let lastWeekSelected = (routine.monthWeekNum === 5) ? lastWeekArray[routine.monthDOW] : null;
+        return [...patternArray, lastWeekSelected];
+      case 'last-weekday':
+        return [30];
+      case 'last-day':
+        return [31];
+      default:
+        return [];
+    }
   }
 
   return (
@@ -150,13 +217,13 @@ function Routines(props){
                     weekDOW: event.target.value
                   })}
                 >
-                  <MenuItem value='月'>月曜日</MenuItem>
-                  <MenuItem value='火'>火曜日</MenuItem>
-                  <MenuItem value='水'>水曜日</MenuItem>
-                  <MenuItem value='木'>木曜日</MenuItem>
-                  <MenuItem value='金'>金曜日</MenuItem>
-                  <MenuItem value='土'>土曜日</MenuItem>
-                  <MenuItem value='日'>日曜日</MenuItem>
+                  <MenuItem value={2}>月曜日</MenuItem>
+                  <MenuItem value={3}>火曜日</MenuItem>
+                  <MenuItem value={4}>水曜日</MenuItem>
+                  <MenuItem value={5}>木曜日</MenuItem>
+                  <MenuItem value={6}>金曜日</MenuItem>
+                  <MenuItem value={0}>土曜日</MenuItem>
+                  <MenuItem value={1}>日曜日</MenuItem>
                 </Select>
               </ControlLabelDiv>
             } />
@@ -194,11 +261,11 @@ function Routines(props){
                       monthDOW: routine.monthDOW
                     })}
                   >
-                    <MenuItem value='第一'>第一</MenuItem>
-                    <MenuItem value='第二'>第二</MenuItem>
-                    <MenuItem value='第三'>第三</MenuItem>
-                    <MenuItem value='第四'>第四</MenuItem>
-                    <MenuItem value='最終'>最終</MenuItem>
+                    <MenuItem value={1}>第一</MenuItem>
+                    <MenuItem value={2}>第二</MenuItem>
+                    <MenuItem value={3}>第三</MenuItem>
+                    <MenuItem value={4}>第四</MenuItem>
+                    <MenuItem value={5}>最終</MenuItem>
                   </Select>
                   <FormHelperText>曜日</FormHelperText>
                   <Select
@@ -210,17 +277,16 @@ function Routines(props){
                       monthDOW: event.target.value
                     })}
                   >
-                    <MenuItem value='月'>月曜日</MenuItem>
-                    <MenuItem value='火'>火曜日</MenuItem>
-                    <MenuItem value='水'>水曜日</MenuItem>
-                    <MenuItem value='木'>木曜日</MenuItem>
-                    <MenuItem value='金'>金曜日</MenuItem>
-                    <MenuItem value='土'>土曜日</MenuItem>
-                    <MenuItem value='日'>日曜日</MenuItem>
+                    <MenuItem value={2}>月曜日</MenuItem>
+                    <MenuItem value={3}>火曜日</MenuItem>
+                    <MenuItem value={4}>水曜日</MenuItem>
+                    <MenuItem value={5}>木曜日</MenuItem>
+                    <MenuItem value={6}>金曜日</MenuItem>
+                    <MenuItem value={0}>土曜日</MenuItem>
+                    <MenuItem value={1}>日曜日</MenuItem>
                   </Select>
                 </ControlLabelDiv>
               } />
-
             </RadioGroup>
           </Grid>
           <Grid container item xs={2} spacing={0} alignContent="flex-start">
@@ -236,6 +302,58 @@ function Routines(props){
             </RadioGroup>
           </Grid>
         </RadioGrid>
+        {/*Calendar*/}
+        <CalendarGrid container spacing={0}>
+          <Grid item xs={12}>
+            <Grid container spacing={0}>
+              {
+                calendarHeadArray.map(day =>
+                  <Grid key={day} item>
+                    <CalendarHeadPaper>{day}</CalendarHeadPaper>
+                  </Grid>
+                )
+              }
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+              {/*using array.map instead of for loop*/}
+              {[...Array(4)].map((ele1, idx1) => (
+                <Grid container key={idx1} spacing={0}>
+                  {[...Array(7)].map((ele2, idx2) => {
+                    let keyNum = idx1 * 7 + idx2 + 1;
+                    return (
+                      <Grid key={keyNum} item>
+                        <CalendarDayPaper daynum={keyNum} selectedday={GetSelectedDay()}>{keyNum}</CalendarDayPaper>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              ))}
+              <Grid container key={4} spacing={0}>
+                <Grid key='fill-1' item>
+                  <CalendarDayPaper daynum={-1} selectedday={GetSelectedDay()}>...</CalendarDayPaper>
+                </Grid>
+                <Grid key='fill-2' item>
+                  <CalendarDayPaper daynum={-2} selectedday={GetSelectedDay()}>...</CalendarDayPaper>
+                </Grid>
+                <Grid key='fill-3' item>
+                  <CalendarDayPaper daynum={-3} selectedday={GetSelectedDay()}>...</CalendarDayPaper>
+                </Grid>
+                <Grid key='fill-4' item>
+                  <CalendarDayPaper daynum={-4} selectedday={GetSelectedDay()}>...</CalendarDayPaper>
+                </Grid>
+                <Grid key={29} item>
+                  <CalendarDayPaper daynum={29} selectedday={GetSelectedDay()}>29</CalendarDayPaper>
+                </Grid>
+                <Grid key={30} item>
+                  <CalendarDayPaper daynum={30} selectedday={GetSelectedDay()}>30</CalendarDayPaper>
+                </Grid>
+                <Grid key={31} item>
+                  <CalendarDayPaper daynum={31} selectedday={GetSelectedDay()}>31</CalendarDayPaper>
+                </Grid>
+              </Grid>
+          </Grid>
+        </CalendarGrid>
       </FormControl>
     </Container>
   );
