@@ -176,7 +176,7 @@ function Routines(props){
       className={props.drawerOpen ? 'drawer-open' : 'drawer-close'}
     >
       <Title>
-        ルーチンタスク
+        新規ルーチンタスク
       </Title>
       <RoutineNameField placeholder="タスク名" variant="outlined" value={routine.name}
         onChange={(event) => ChangeRoutine({
@@ -217,13 +217,13 @@ function Routines(props){
                     weekDOW: event.target.value
                   })}
                 >
+                  <MenuItem value={1}>日曜日</MenuItem>
                   <MenuItem value={2}>月曜日</MenuItem>
                   <MenuItem value={3}>火曜日</MenuItem>
                   <MenuItem value={4}>水曜日</MenuItem>
                   <MenuItem value={5}>木曜日</MenuItem>
                   <MenuItem value={6}>金曜日</MenuItem>
                   <MenuItem value={0}>土曜日</MenuItem>
-                  <MenuItem value={1}>日曜日</MenuItem>
                 </Select>
               </ControlLabelDiv>
             } />
@@ -277,13 +277,13 @@ function Routines(props){
                       monthDOW: event.target.value
                     })}
                   >
+                    <MenuItem value={1}>日曜日</MenuItem>
                     <MenuItem value={2}>月曜日</MenuItem>
                     <MenuItem value={3}>火曜日</MenuItem>
                     <MenuItem value={4}>水曜日</MenuItem>
                     <MenuItem value={5}>木曜日</MenuItem>
                     <MenuItem value={6}>金曜日</MenuItem>
                     <MenuItem value={0}>土曜日</MenuItem>
-                    <MenuItem value={1}>日曜日</MenuItem>
                   </Select>
                 </ControlLabelDiv>
               } />
