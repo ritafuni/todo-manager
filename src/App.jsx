@@ -118,10 +118,6 @@ function App(){
     });
   }
 
-  function ChangePage(page){
-    changePageState(page);
-  }
-
   //resultに結果が入ってくる
   function onDragEnd(result){
     const {draggableId, source, destination} = result;
@@ -171,7 +167,7 @@ function App(){
       <Sidebar
         drawerOpen={drawerOpen}
         toggleDrawer={ToggleDrawer}
-        changePage={ChangePage}
+        changePage={changePageState}
       />
       <DragDropContext onDragEnd={onDragEnd}>
         {
