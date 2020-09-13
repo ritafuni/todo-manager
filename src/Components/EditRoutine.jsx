@@ -341,6 +341,7 @@ function EditRoutine(props){
       </FormControl>
       <ButtonDiv>
         <button className='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>ルーチンを保存</button>
+        <button className='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>キャンセル</button>
       </ButtonDiv>
     </div>
   );

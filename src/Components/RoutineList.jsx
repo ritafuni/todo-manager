@@ -1,23 +1,58 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Droppable } from 'react-beautiful-dnd';
+import Routine from './Routine';
 
 const ButtonDiv = styled.div`
-  margin: 8px;
+  float: right;
 `;
 
+const RoutineBody = styled.tbody`
+padding: 8px;
+`
 const Title = styled.h4`
   padding: 8px;
 `;
+
 
 function RoutineList(props){
   return (
     <div>
       <Title>
         ルーチン一覧
+        <ButtonDiv>
+          <button className='btn btn-primary' onClick={() => props.changePageFunc('EditRoutine')}>新規ルーチン</button>
+        </ButtonDiv>
       </Title>
-      <ButtonDiv>
-        <button className='btn btn-primary' onClick={() => props.changePageFunc('EditRoutine')}>新規ルーチン</button>
-      </ButtonDiv>
+      <table className='table'>
+        <thead>
+          <tr className='bg-primary text-light'>
+            <th scope='col'>タスク名</th>
+            <th scope='col'>カテゴリ</th>
+            <th scope='col'>周期</th>
+            <th scope='col'>削除</th>
+          </tr>
+        </thead>
+        <Droppable droppableId='RoutineDroppable'>
+        {(provided) => (
+          <RoutineBody
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {props.routineList.routines.map((routine, index) =>
+              <Routine
+                key={routine.id}
+                task={routine}
+                index={index}
+                delFunc={props.delFunc}
+                editFunc={props.editFunc}
+              />
+            )}
+            {provided.placeholder}
+          </RoutineBody>
+        )}
+        </Droppable>
+      </table>
     </div>
   );
 }

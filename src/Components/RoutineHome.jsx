@@ -33,7 +33,10 @@ function Routines(props){
     >
       {
         (pageState === 'RoutineList') &&
-        <RoutineList changePageFunc={changePageState} />
+        <RoutineList
+          changePageFunc={changePageState}
+          routineList={routineList}
+        />
       }
       {
         (pageState === 'EditRoutine') &&

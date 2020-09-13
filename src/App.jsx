@@ -1,7 +1,7 @@
 import React from 'react';
 import { initialTasks } from './initial-data';
 import TodayTaskList from './Components/TodayTaskList';
-import Routines from './Components/Routines';
+import RoutineHome from './Components/RoutineHome';
 import DeadlineTasks from './Components/DeadlineTasks';
 import Menubar from './Components/Menubar';
 import Sidebar from './Components/Sidebar';
@@ -184,7 +184,7 @@ function App(){
         }
         {
           (pageState === 'routines') &&
-          <Routines drawerOpen={drawerOpen} />
+          <RoutineHome drawerOpen={drawerOpen} />
         }
         {
           (pageState === 'deadline-task') &&

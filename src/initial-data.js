@@ -16,10 +16,10 @@ export const initialTasks = {
 };
 
 export const initialRoutines = {
-  routines: {
-    "routine-1": { id: "routine-1", content: "打刻", category: "仕事", cycle: "平日" },
-    "routine-2": { id: "routine-2", content: "打刻", category: "仕事", cycle: "平日" },
-    "routine-3": { id: "routine-3", content: "勤務予定届", category: "仕事", cycle: "金曜日" }
-  },
+  routines: [
+    { id: "routine-1", content: "打刻", category: "仕事", cycle: "平日" },
+    { id: "routine-2", content: "わくわくマイレージ入力", category: "仕事", cycle: "平日" },
+    { id: "routine-3", content: "勤務予定届", category: "仕事", cycle: "金曜日" }
+  ],
   routineCount: 3
 };
