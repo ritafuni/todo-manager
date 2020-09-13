@@ -85,29 +85,10 @@ function App(){
   }
 
   function EditTask(value, index, type){
-    let newTask;
-    switch(type){
-      case 'content':
-        newTask = {
-          ...state.tasks[index],
-          content: value
-        };
-        break;
-      case 'category':
-        newTask = {
-          ...state.tasks[index],
-          category: value
-        };
-        break;
-      case 'taskType':
-        newTask = {
-          ...state.tasks[index],
-          taskType: value
-        };
-        break;
-      default:
-        break;
-    }
+    let newTask = {
+      ...state.tasks[index],
+      [type]: value
+    };
 
     changeState({
       ...state,

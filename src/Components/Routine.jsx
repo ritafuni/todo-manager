@@ -41,13 +41,13 @@ function Routine(props){
           <td>
             <Input
               value={props.task.content}
-              onChange={(event) => props.editFunc(event.target.value, props.task.id, 'content')}
+              onChange={(event) => props.owFunc(props.index, 'content', event.target.value)}
             />
           </td>
           <td>
             <Select
               value={props.task.category}
-              onChange={(event) => props.editFunc(event.target.value, props.task.id, 'category')}
+              onChange={(event) => props.owFunc(props.index, 'category', event.target.value)}
             >
               <MenuItem value='仕事'>仕事</MenuItem>
               <MenuItem value='家事'>家事</MenuItem>

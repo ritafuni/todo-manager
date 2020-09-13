@@ -46,6 +46,7 @@ function RoutineList(props){
                 index={index}
                 delFunc={props.delFunc}
                 editFunc={props.editFunc}
+                owFunc={props.owFunc}
               />
             )}
             {provided.placeholder}

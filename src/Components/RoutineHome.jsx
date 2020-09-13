@@ -26,6 +26,26 @@ function Routines(props){
   const [routineList, setRoutineList] = React.useState(initialRoutines);
   const [pageState, changePageState] = React.useState('RoutineList');
 
+  function DeleteRoutine(index){
+    let afterList = routineList.routines.filter((ele, idx) => idx !== index);
+    setRoutineList({
+      routines: afterList,
+      routineCount: routineList.routineCount
+    });
+  }
+
+  function OverwriteRoutine(index, type, value){
+    let afterList = routineList.routines;
+    afterList[index] = {
+      ...routineList.routines[index],
+      [type]: value
+    }
+    setRoutineList({
+      routines: afterList,
+      routineCount: routineList.routineCount
+    });
+  }
+
   return (
     <Container
       drawerOpen={props.drawerOpen}
@@ -36,11 +56,15 @@ function Routines(props){
         <RoutineList
           changePageFunc={changePageState}
           routineList={routineList}
+          delFunc={DeleteRoutine}
+          owFunc={OverwriteRoutine}
         />
       }
       {
         (pageState === 'EditRoutine') &&
-        <EditRoutine changePageFunc={changePageState} />
+        <EditRoutine
+          changePageFunc={changePageState}
+        />
       }
     </Container>
   );
