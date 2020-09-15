@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { drawerWidth } from './Sidebar';
+// import { drawerWidth } from './Sidebar';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -46,6 +46,11 @@ const CalendarHeadPaper = styled(Paper)`
   width: 100px;
 `;
 
+const CategoryDiv = styled.div`
+  margin-left: 10px;
+  margin-bottom: 15px;
+`;
+
 const ControlLabelDiv = styled.div`
   display: flex;
 
@@ -86,10 +91,18 @@ const RadioGrid = styled(Grid)`
   margin-left: 20px;
 `;
 
-const RoutineNameField = styled(TextField)`
-  margin: 0 0 15px 10px;
+const RoutinecontentDiv = styled.div`
+  margin: 0 0 5px 10px;
+  vertical-align: middle;
   width: 70%;
-  > div > input {
+  > span {
+    display: inline-block;
+    margin-top: 5px;
+  }
+  > div {
+    width: calc(100% - 80px);
+  }
+  > div > div > input {
     padding: 10px;
   }
 `;
@@ -102,14 +115,17 @@ function EditRoutine(props){
   const calendarHeadArray = ['日', '月', '火', '水', '木', '金', '土'];
 
   const initRoutine = {
-    name: '',
-    type: '',
+    content: '',
+    category: '',
+    cycleType: '',
     weekDOW: '',
     monthDay: '',
     monthWeekNum: '',
     monthDOW: '',
   };
   const [routine, setRoutine] = React.useState(initRoutine);
+  //state for set editing routine
+  const [editingRoutineFlag, setEditingRoutineFlag] = React.useState(false);
 
   function ChangeRoutine(newRoutine){
     //DOW...Day of Week
@@ -120,6 +136,7 @@ function EditRoutine(props){
       }
     );
     console.log(routine);
+    return true;
   }
 
   function GetSelectedDay(){
@@ -127,7 +144,7 @@ function EditRoutine(props){
     const monthArray = [...Array(28)].map((ele, idx) => idx + 1);
     let patternArray;
     let lastWeekArray = [31, -1, -2, -3, -4, 29, 30];
-    switch(routine.type){
+    switch(routine.cycleType){
       case 'everyday':
         return [...monthArray, -1, -2, -3, -4, 29, 30, 31];
       case 'weekday':
@@ -159,23 +176,45 @@ function EditRoutine(props){
 
   return (
     <div>
+      {
+        //set editing routine to routine
+        //the functions will be executed from the left to right
+        (props.editingRoutine !== null) && (editingRoutineFlag === false) && ChangeRoutine(props.editingRoutine) && (setEditingRoutineFlag(true))
+      }
       <Title>
         新規ルーチンタスク
       </Title>
-      <RoutineNameField placeholder="タスク名" variant="outlined" value={routine.name}
-        onChange={(event) => ChangeRoutine({
-          ...routine,
-          name: event.target.value
-        })}
-      />
+      <RoutinecontentDiv>
+        <span>タスク名：</span>
+        <TextField placeholder="タスク名" variant="outlined" value={routine.content}
+          onChange={(event) => ChangeRoutine({
+            ...routine,
+            content: event.target.value
+          })}
+        />
+      </RoutinecontentDiv>
+      <CategoryDiv>
+        カテゴリ：
+        <Select
+          value={routine.category}
+          onChange={(event) => ChangeRoutine({
+            ...routine,
+            category: event.target.value
+          })}
+        >
+          <MenuItem value='仕事'>仕事</MenuItem>
+          <MenuItem value='家事'>家事</MenuItem>
+          <MenuItem value='趣味'>趣味</MenuItem>
+        </Select>
+      </CategoryDiv>
       <FormControl component="fieldset">
         <RadioGrid container spacing={0}>
           <Grid container item xs={2} spacing={0} alignContent="flex-start">
             <FormLabel component="legend">日</FormLabel>
-            <RadioGroup aria-label="day" name="day" value={routine.type}
+            <RadioGroup aria-label="day" content="day" value={routine.cycleType}
               onChange={(event) => ChangeRoutine({
-                name: routine.name,
-                type: event.target.value
+                content: routine.content,
+                cycleType: event.target.value
               })}
             >
               <CustomFormControlLabel value="everyday" control={<Radio />} label="毎日" />
@@ -184,10 +223,10 @@ function EditRoutine(props){
           </Grid>
           <Grid container item xs={2} spacing={0} alignContent="flex-start">
             <FormLabel component="legend">週</FormLabel>
-            <RadioGroup aria-label="week" name="week" value={routine.type}
+            <RadioGroup aria-label="week" content="week" value={routine.cycleType}
               onChange={(event) => ChangeRoutine({
-                name: routine.name,
-                type: event.target.value
+                content: routine.content,
+                cycleType: event.target.value
               })}
             >
             <CustomFormControlLabel value="every-day-of-week" control={<Radio />} label={
@@ -196,8 +235,8 @@ function EditRoutine(props){
                 <Select
                   value={routine.weekDOW}
                   onChange={(event) => ChangeRoutine({
-                    name: routine.name,
-                    type: 'every-day-of-week',
+                    content: routine.content,
+                    cycleType: 'every-day-of-week',
                     weekDOW: event.target.value
                   })}
                 >
@@ -215,18 +254,18 @@ function EditRoutine(props){
           </Grid>
           <Grid container item xs={3} spacing={0} alignContent="flex-start">
             <FormLabel component="legend">月</FormLabel>
-            <RadioGroup aria-label="month" name="month" value={routine.type}
+            <RadioGroup aria-label="month" content="month" value={routine.cycleType}
               onChange={(event) => ChangeRoutine({
-                name: routine.name,
-                type: event.target.value
+                content: routine.content,
+                cycleType: event.target.value
               })}
             >
               <CustomFormControlLabel value="selected-day" control={<Radio />} label={
                 <ControlLabelDiv>
                   <CustomTextField placeholder="指定日" variant="outlined" value={routine.monthDay}
                     onChange={(event) => ChangeRoutine({
-                      name: routine.name,
-                      type: 'selected-day',
+                      content: routine.content,
+                      cycleType: 'selected-day',
                       monthDay: event.target.value
                     })}
                   />
@@ -239,8 +278,8 @@ function EditRoutine(props){
                   <Select
                     value={routine.monthWeekNum}
                     onChange={(event) => ChangeRoutine({
-                      name: routine.name,
-                      type: 'selected-day-of-week',
+                      content: routine.content,
+                      cycleType: 'selected-day-of-week',
                       monthWeekNum: event.target.value,
                       monthDOW: routine.monthDOW
                     })}
@@ -255,8 +294,8 @@ function EditRoutine(props){
                   <Select
                     value={routine.monthDOW}
                     onChange={(event) => ChangeRoutine({
-                      name: routine.name,
-                      type: 'selected-day-of-week',
+                      content: routine.content,
+                      cycleType: 'selected-day-of-week',
                       monthWeekNum: routine.monthWeekNum,
                       monthDOW: event.target.value
                     })}
@@ -275,10 +314,10 @@ function EditRoutine(props){
           </Grid>
           <Grid container item xs={2} spacing={0} alignContent="flex-start">
             <HiddenFormLabel component="legend">月</HiddenFormLabel>
-            <RadioGroup aria-label="month" name="month" value={routine.type}
+            <RadioGroup aria-label="month" content="month" value={routine.cycleType}
               onChange={(event) => ChangeRoutine({
-                name: routine.name,
-                type: event.target.value
+                content: routine.content,
+                cycleType: event.target.value
               })}
             >
               <CustomFormControlLabel value="last-weekday" control={<Radio />} label="最終平日" />
@@ -340,8 +379,8 @@ function EditRoutine(props){
         </CalendarGrid>
       </FormControl>
       <ButtonDiv>
-        <button className='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>ルーチンを保存</button>
-        <button className='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>キャンセル</button>
+        <button classcontent='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>ルーチンを保存</button>
+        <button classcontent='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>キャンセル</button>
       </ButtonDiv>
     </div>
   );

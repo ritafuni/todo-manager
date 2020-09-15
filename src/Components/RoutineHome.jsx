@@ -24,6 +24,7 @@ const Container = styled.div`
 
 function Routines(props){
   const [routineList, setRoutineList] = React.useState(initialRoutines);
+  const [editingRoutine, setEditingRoutine] = React.useState(null);
   const [pageState, changePageState] = React.useState('RoutineList');
 
   function DeleteRoutine(index){
@@ -58,12 +59,14 @@ function Routines(props){
           routineList={routineList}
           delFunc={DeleteRoutine}
           owFunc={OverwriteRoutine}
+          setEditingRoutine={setEditingRoutine}
         />
       }
       {
         (pageState === 'EditRoutine') &&
         <EditRoutine
           changePageFunc={changePageState}
+          editingRoutine={editingRoutine}
         />
       }
     </Container>

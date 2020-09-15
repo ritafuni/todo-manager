@@ -42,11 +42,13 @@ function RoutineList(props){
             {props.routineList.routines.map((routine, index) =>
               <Routine
                 key={routine.id}
-                task={routine}
+                routine={routine}
                 index={index}
                 delFunc={props.delFunc}
                 editFunc={props.editFunc}
                 owFunc={props.owFunc}
+                changePageFunc={props.changePageFunc}
+                setEditingRoutine={props.setEditingRoutine}
               />
             )}
             {provided.placeholder}

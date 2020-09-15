@@ -28,7 +28,7 @@ const EditButton = styled.button`
 function Routine(props){
   return(
     <Draggable
-      draggableId={props.task.id}
+      draggableId={props.routine.id}
       index={props.index}
     >
       {(provided, snapshot) => (
@@ -40,13 +40,13 @@ function Routine(props){
         >
           <td>
             <Input
-              value={props.task.content}
+              value={props.routine.content}
               onChange={(event) => props.owFunc(props.index, 'content', event.target.value)}
             />
           </td>
           <td>
             <Select
-              value={props.task.category}
+              value={props.routine.category}
               onChange={(event) => props.owFunc(props.index, 'category', event.target.value)}
             >
               <MenuItem value='仕事'>仕事</MenuItem>
@@ -55,8 +55,11 @@ function Routine(props){
             </Select>
           </td>
           <td>
-            {props.task.cycle}
-            <EditButton className='btn' onClick = {() => props.addFunc(props.index)}>
+            {props.routine.cycle}
+            <EditButton className='btn' onClick = {() => {
+              props.setEditingRoutine(props.routine);
+              props.changePageFunc('EditRoutine');
+            }}>
               <EditIcon />
             </EditButton>
           </td>
