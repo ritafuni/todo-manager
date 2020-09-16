@@ -174,6 +174,13 @@ function EditRoutine(props){
     }
   }
 
+  function SaveRoutine(){
+    if(props.editingRoutineIdx !== -1){
+      props.owFunc(props.editingRoutineIdx, routine);
+    }
+    props.changePageFunc('RoutineList');
+  }
+
   return (
     <div>
       {
@@ -379,8 +386,8 @@ function EditRoutine(props){
         </CalendarGrid>
       </FormControl>
       <ButtonDiv>
-        <button classcontent='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>ルーチンを保存</button>
-        <button classcontent='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>キャンセル</button>
+        <button className='btn btn-primary' onClick={() => SaveRoutine()}>ルーチンを保存</button>
+        <button className='btn btn-primary' onClick={() => props.changePageFunc('RoutineList')}>キャンセル</button>
       </ButtonDiv>
     </div>
   );

@@ -24,7 +24,9 @@ const Container = styled.div`
 
 function Routines(props){
   const [routineList, setRoutineList] = React.useState(initialRoutines);
+  //編集中のルーチンの状態を保存しておくためのステート
   const [editingRoutine, setEditingRoutine] = React.useState(null);
+  const [editingRoutineIdx, setEditingRoutineIdx] = React.useState(-1);
   const [pageState, changePageState] = React.useState('RoutineList');
 
   function DeleteRoutine(index){
@@ -35,7 +37,16 @@ function Routines(props){
     });
   }
 
-  function OverwriteRoutine(index, type, value){
+  function OverWriteRoutine(index, routine){
+    let afterList = routineList.routines;
+    afterList[index] = routine;
+    setRoutineList({
+      routines: afterList,
+      routineCount: routineList.routineCount
+    });
+  }
+
+  function OverwriteRoutinePart(index, type, value){
     let afterList = routineList.routines;
     afterList[index] = {
       ...routineList.routines[index],
@@ -58,8 +69,9 @@ function Routines(props){
           changePageFunc={changePageState}
           routineList={routineList}
           delFunc={DeleteRoutine}
-          owFunc={OverwriteRoutine}
+          owFunc={OverwriteRoutinePart}
           setEditingRoutine={setEditingRoutine}
+          setEditingRoutineIdx={setEditingRoutineIdx}
         />
       }
       {
@@ -67,6 +79,8 @@ function Routines(props){
         <EditRoutine
           changePageFunc={changePageState}
           editingRoutine={editingRoutine}
+          editingRoutineIdx={editingRoutineIdx}
+          owFunc={OverWriteRoutine}
         />
       }
     </Container>

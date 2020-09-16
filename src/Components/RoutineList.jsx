@@ -31,6 +31,7 @@ function RoutineList(props){
             <th scope='col'>カテゴリ</th>
             <th scope='col'>周期</th>
             <th scope='col'>削除</th>
+            <th scope='col'>編集</th>
           </tr>
         </thead>
         <Droppable droppableId='RoutineDroppable'>
@@ -49,6 +50,7 @@ function RoutineList(props){
                 owFunc={props.owFunc}
                 changePageFunc={props.changePageFunc}
                 setEditingRoutine={props.setEditingRoutine}
+                setEditingRoutineIdx={props.setEditingRoutineIdx}
               />
             )}
             {provided.placeholder}

@@ -21,10 +21,6 @@ const Container = styled.tr`
   }
 `;
 
-const EditButton = styled.button`
-  float: right;
-`;
-
 function Routine(props){
   return(
     <Draggable
@@ -56,16 +52,19 @@ function Routine(props){
           </td>
           <td>
             {props.routine.cycle}
-            <EditButton className='btn' onClick = {() => {
-              props.setEditingRoutine(props.routine);
-              props.changePageFunc('EditRoutine');
-            }}>
-              <EditIcon />
-            </EditButton>
           </td>
           <td>
             <button className='btn' onClick = {() => props.delFunc(props.index)}>
               <DeleteForeverIcon />
+            </button>
+          </td>
+          <td>
+            <button className='btn' onClick = {() => {
+              props.setEditingRoutine(props.routine);
+              props.setEditingRoutineIdx(props.index);
+              props.changePageFunc('EditRoutine');
+            }}>
+              <EditIcon />
             </button>
           </td>
         </Container>
