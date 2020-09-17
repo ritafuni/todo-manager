@@ -177,6 +177,8 @@ function EditRoutine(props){
   function SaveRoutine(){
     if(props.editingRoutineIdx !== -1){
       props.owFunc(props.editingRoutineIdx, routine);
+    } else {
+      props.addFunc(routine);
     }
     props.changePageFunc('RoutineList');
   }

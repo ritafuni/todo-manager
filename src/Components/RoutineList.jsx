@@ -21,7 +21,11 @@ function RoutineList(props){
       <Title>
         ルーチン一覧
         <ButtonDiv>
-          <button className='btn btn-primary' onClick={() => props.changePageFunc('EditRoutine')}>新規ルーチン</button>
+          <button className='btn btn-primary' onClick={() => {
+            props.setEditingRoutine(null);
+            props.setEditingRoutineIdx(-1);
+            props.changePageFunc('EditRoutine');
+          }}>新規ルーチン</button>
         </ButtonDiv>
       </Title>
       <table className='table'>

@@ -29,6 +29,20 @@ function Routines(props){
   const [editingRoutineIdx, setEditingRoutineIdx] = React.useState(-1);
   const [pageState, changePageState] = React.useState('RoutineList');
 
+  function AddRoutine(routine){
+    let afterList = routineList.routines;
+    let newRoutineCount = routineList.routineCount + 1;
+    let routineWithId = {
+      ...routine,
+      id: 'routine-' + newRoutineCount
+    }
+    afterList.push(routineWithId);
+    setRoutineList({
+      routines: afterList,
+      routineCount: newRoutineCount
+    });
+  }
+
   function DeleteRoutine(index){
     let afterList = routineList.routines.filter((ele, idx) => idx !== index);
     setRoutineList({
@@ -81,6 +95,7 @@ function Routines(props){
           editingRoutine={editingRoutine}
           editingRoutineIdx={editingRoutineIdx}
           owFunc={OverWriteRoutine}
+          addFunc={AddRoutine}
         />
       }
     </Container>
