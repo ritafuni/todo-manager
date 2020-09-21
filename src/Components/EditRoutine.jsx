@@ -117,6 +117,7 @@ function EditRoutine(props){
   const initRoutine = {
     content: '',
     category: '',
+    cycle: '',
     cycleType: '',
     weekDOW: '',
     monthDay: '',
@@ -137,6 +138,38 @@ function EditRoutine(props){
     );
     console.log(routine);
     return true;
+  }
+
+  function GenerateCycle(cycleType, option1 = 0, option2 = 0){
+    let newCycle = '';
+    const DOWArray = ['土', '日', '月', '火', '水', '木', '金'];
+    const weekNumArray = ['第一', '第二', '第三', '第四', '最終'];
+    switch(cycleType){
+      case 'everyday':
+        newCycle = '毎日';
+        break;
+      case 'weekday':
+        newCycle = '平日';
+        break;
+      case 'every-day-of-week':
+        newCycle = DOWArray[option1] + '曜日';
+        break;
+      case 'selected-day':
+        newCycle = '毎月' + option1 + '日';
+        break;
+      case 'selected-day-of-week':
+        newCycle = weekNumArray[option1 - 1] + DOWArray[option2] + '曜日';
+        break;
+      case 'last-weekday':
+        newCycle = '最終平日';
+        break;
+      case 'last-day':
+        newCycle = '最終日';
+        break;
+      default:
+        break;
+    }
+    return newCycle;
   }
 
   function GetSelectedDay(){
@@ -191,7 +224,7 @@ function EditRoutine(props){
         (props.editingRoutine !== null) && (editingRoutineFlag === false) && ChangeRoutine(props.editingRoutine) && (setEditingRoutineFlag(true))
       }
       <Title>
-        新規ルーチンタスク
+        {props.editingRoutine === null ? '新規ルーチンタスク' : 'ルーチンタスク編集'}
       </Title>
       <RoutinecontentDiv>
         <span>タスク名：</span>
@@ -223,7 +256,9 @@ function EditRoutine(props){
             <RadioGroup aria-label="day" content="day" value={routine.cycleType}
               onChange={(event) => ChangeRoutine({
                 content: routine.content,
-                cycleType: event.target.value
+                category: routine.category,
+                cycleType: event.target.value,
+                cycle: GenerateCycle(event.target.value)
               })}
             >
               <CustomFormControlLabel value="everyday" control={<Radio />} label="毎日" />
@@ -235,6 +270,7 @@ function EditRoutine(props){
             <RadioGroup aria-label="week" content="week" value={routine.cycleType}
               onChange={(event) => ChangeRoutine({
                 content: routine.content,
+                category: routine.category,
                 cycleType: event.target.value
               })}
             >
@@ -245,8 +281,10 @@ function EditRoutine(props){
                   value={routine.weekDOW}
                   onChange={(event) => ChangeRoutine({
                     content: routine.content,
+                    category: routine.category,
                     cycleType: 'every-day-of-week',
-                    weekDOW: event.target.value
+                    weekDOW: event.target.value,
+                    cycle: GenerateCycle('every-day-of-week', event.target.value)
                   })}
                 >
                   <MenuItem value={1}>日曜日</MenuItem>
@@ -266,6 +304,7 @@ function EditRoutine(props){
             <RadioGroup aria-label="month" content="month" value={routine.cycleType}
               onChange={(event) => ChangeRoutine({
                 content: routine.content,
+                category: routine.category,
                 cycleType: event.target.value
               })}
             >
@@ -274,8 +313,10 @@ function EditRoutine(props){
                   <CustomTextField placeholder="指定日" variant="outlined" value={routine.monthDay}
                     onChange={(event) => ChangeRoutine({
                       content: routine.content,
+                      category: routine.category,
                       cycleType: 'selected-day',
-                      monthDay: event.target.value
+                      monthDay: event.target.value,
+                      cycle: GenerateCycle('selected-day', event.target.value)
                     })}
                   />
                   <MonthTextAdd>日</MonthTextAdd>
@@ -288,9 +329,11 @@ function EditRoutine(props){
                     value={routine.monthWeekNum}
                     onChange={(event) => ChangeRoutine({
                       content: routine.content,
+                      category: routine.category,
                       cycleType: 'selected-day-of-week',
                       monthWeekNum: event.target.value,
-                      monthDOW: routine.monthDOW
+                      monthDOW: routine.monthDOW,
+                      cycle: GenerateCycle('selected-day-of-week', event.target.value, routine.monthDOW)
                     })}
                   >
                     <MenuItem value={1}>第一</MenuItem>
@@ -304,9 +347,11 @@ function EditRoutine(props){
                     value={routine.monthDOW}
                     onChange={(event) => ChangeRoutine({
                       content: routine.content,
+                      category: routine.category,
                       cycleType: 'selected-day-of-week',
                       monthWeekNum: routine.monthWeekNum,
-                      monthDOW: event.target.value
+                      monthDOW: event.target.value,
+                      cycle: GenerateCycle('selected-day-of-week', routine.monthWeekNum, event.target.value)
                     })}
                   >
                     <MenuItem value={1}>日曜日</MenuItem>
@@ -326,7 +371,9 @@ function EditRoutine(props){
             <RadioGroup aria-label="month" content="month" value={routine.cycleType}
               onChange={(event) => ChangeRoutine({
                 content: routine.content,
-                cycleType: event.target.value
+                category: routine.category,
+                cycleType: event.target.value,
+                cycle: GenerateCycle(event.target.value)
               })}
             >
               <CustomFormControlLabel value="last-weekday" control={<Radio />} label="最終平日" />
