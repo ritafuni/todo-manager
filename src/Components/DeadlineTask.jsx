@@ -6,6 +6,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 
 //>?で内部のスタイル指定ができる
 const Container = styled.tr`
@@ -21,8 +22,8 @@ const Container = styled.tr`
   }
 `;
 
-function Task(props){
-  return(
+function DeadlineTask(props){
+  return (
     <Draggable
       draggableId={props.task.id}
       index={props.index}
@@ -38,13 +39,13 @@ function Task(props){
           <td>
             <Input
               value={props.task.content}
-              onChange={(event) => props.editFunc(props.task.id, 'content', event.target.value)}
+              onChange={(event) => props.editFunc(props.index, 'content', event.target.value)}
             />
           </td>
           <td>
             <Select
               value={props.task.category}
-              onChange={(event) => props.editFunc(props.task.id, 'category', event.target.value)}
+              onChange={(event) => props.editFunc(props.index, 'category', event.target.value)}
             >
               <MenuItem value='仕事'>仕事</MenuItem>
               <MenuItem value='家事'>家事</MenuItem>
@@ -52,16 +53,15 @@ function Task(props){
             </Select>
           </td>
           <td>
-            <Select
-              value={props.task.taskType}
-              onChange={(event) => props.editFunc(props.task.id, 'taskType', event.target.value)}
-            >
-              <MenuItem value='毎日'>毎日</MenuItem>
-              <MenuItem value='毎週'>毎週</MenuItem>
-              <MenuItem value='毎月'>毎月</MenuItem>
-              <MenuItem value='不定期'>不定期</MenuItem>
-              <MenuItem value='割込'>割込</MenuItem>
-            </Select>
+            <TextField
+              id="date"
+              type="date"
+              value={props.task.deadline}
+              onChange={(event) => props.editFunc(props.index, 'deadline', event.target.value)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
           </td>
           <td>
             <button className='btn' onClick = {() => props.delFunc(props.index)}>
@@ -79,4 +79,4 @@ function Task(props){
   );
 }
 
-export default Task;
+export default DeadlineTask;

@@ -1,16 +1,17 @@
 import React from 'react';
-import { initialTasks } from './initial-data';
+import { initialTasks, initialRoutines, initialDeadlines } from './initial-data';
 import TodayTaskList from './Components/TodayTaskList';
 import RoutineHome from './Components/RoutineHome';
-import DeadlineTasks from './Components/DeadlineTasks';
+import DeadlineTaskList from './Components/DeadlineTaskList';
 import Menubar from './Components/Menubar';
 import Sidebar from './Components/Sidebar';
 import { DragDropContext } from 'react-beautiful-dnd';
 // import styled from 'styled-components';
 
 function App(){
-  //state: TODO data
-  const [state, changeState] = React.useState(initialTasks);
+  //tasks: TODO data
+  const [tasks, changeTasks] = React.useState(initialTasks);
+  const [deadlines, changeDeadlines] = React.useState(initialDeadlines);
   //drawer open
   const [drawerOpen, changeDrawerState] = React.useState(true);
   //page state
@@ -18,14 +19,14 @@ function App(){
   const LOCALSTORAGE_KEY = 'TODO-Manager';
 
   function SaveJSON(){
-    let stringifyJSON = JSON.stringify(state);
+    let stringifyJSON = JSON.stringify(tasks);
     window.localStorage.setItem(LOCALSTORAGE_KEY, stringifyJSON);
   }
 
   function LoadJSON(){
     const storeData = window.localStorage.getItem(LOCALSTORAGE_KEY);
     const json = storeData ? JSON.parse(storeData) : initialTasks;
-    changeState(
+    changeTasks(
       json
     );
   }
@@ -34,66 +35,102 @@ function App(){
     changeDrawerState(!drawerOpen);
   }
 
+  function AddDeadline(index){
+    let newDeadlineList = deadlines.deadlines;
+    const today = new Date().toISOString().slice(0,10);
+    const newDeadlineCount = deadlines.deadlineCount + 1;
+    const emptyDeadline = {
+      id: 'deadline-' + newDeadlineCount,
+      content: '',
+      category: '',
+      deadline: today
+    }
+    newDeadlineList.splice(index + 1, 0, emptyDeadline);
+    changeDeadlines({
+      deadlines: newDeadlineList,
+      deadlineCount: newDeadlineCount
+    });
+  }
+
   function AddTask(index){
     //add taskCount
-    const newTaskCount = state.taskCount + 1;
-
+    const newTaskCount = tasks.taskCount + 1;
     //add task
     const newTaskId = 'task-' + newTaskCount.toString();
     const newTasks = {
-      ...state.tasks,
+      ...tasks.tasks,
       [newTaskId]: { id: newTaskId, content: '', category: '仕事', taskType: '毎日'}
     }
-
     //update taskId array
     const columnId = 'column-1';
-    const newTaskIds = Array.from(state.columns[columnId].taskIds);
+    const newTaskIds = Array.from(tasks.columns[columnId].taskIds);
     newTaskIds.splice(index + 1, 0, newTaskId);
     const newColumn = {
-      ...state.columns[columnId],
+      ...tasks.columns[columnId],
       taskIds: newTaskIds
     }
-
-    //update state
-    changeState({
+    //update tasks
+    changeTasks({
       tasks: newTasks,
       taskCount: newTaskCount,
       columns: {
-        ...state.columns,
+        ...tasks.columns,
         [newColumn.id]: newColumn
       }
     });
   }
 
+  function DeleteDeadline(index){
+    let newDeadlineList = deadlines.deadlines;
+    newDeadlineList.splice(index, 1);
+    changeDeadlines({
+      ...deadlines,
+      deadlines: newDeadlineList
+    });
+  }
+
   function DeleteTask(index){
     const columnId = 'column-1';
-    const newTaskIds = Array.from(state.columns[columnId].taskIds);
+    const newTaskIds = Array.from(tasks.columns[columnId].taskIds);
     newTaskIds.splice(index, 1);
     const newColumn = {
-      ...state.columns[columnId],
+      ...tasks.columns[columnId],
       taskIds: newTaskIds
     }
 
-    changeState({
-      ...state,
+    changeTasks({
+      ...tasks,
       columns: {
-        ...state.columns,
+        ...tasks.columns,
         //[]で囲むことによって、:の左側にも値が代入できる
         [newColumn.id]: newColumn
       }
     });
   }
 
-  function EditTask(value, index, type){
+  function EditDeadline(index, type, value){
+    let newDeadline = {
+      ...deadlines.deadlines[index],
+      [type]: value
+    };
+    let newDeadlineList = deadlines.deadlines;
+    newDeadlineList[index] = newDeadline;
+    changeDeadlines({
+      ...deadlines,
+      deadlines: newDeadlineList
+    });
+  }
+
+  function EditTask(index, type, value){
     let newTask = {
-      ...state.tasks[index],
+      ...tasks.tasks[index],
       [type]: value
     };
 
-    changeState({
-      ...state,
+    changeTasks({
+      ...tasks,
       tasks: {
-        ...state.tasks,
+        ...tasks.tasks,
         [index]: newTask
       }
     });
@@ -113,7 +150,7 @@ function App(){
     }
 
     //reorder
-    const column = state.columns[source.droppableId];
+    const column = tasks.columns[source.droppableId];
     const newTaskIds = Array.from(column.taskIds);
     //delete source id
     newTaskIds.splice(source.index, 1);
@@ -124,10 +161,10 @@ function App(){
       taskIds: newTaskIds
     }
 
-    changeState({
-      ...state,
+    changeTasks({
+      ...tasks,
       columns: {
-        ...state.columns,
+        ...tasks.columns,
         //[]で囲むことによって、:の左側にも値が代入できる
         [newColumn.id]: newColumn
       }
@@ -135,8 +172,8 @@ function App(){
   }
 
   const loadColumn = 'column-1';
-  const column = state.columns[loadColumn];
-  const tasks = state.columns[loadColumn].taskIds.map(taskId => state.tasks[taskId]);
+  const column = tasks.columns[loadColumn];
+  const tasksArray = tasks.columns[loadColumn].taskIds.map(taskId => tasks.tasks[taskId]);
   return (
     <div>
       <Menubar
@@ -154,9 +191,9 @@ function App(){
         {
           (pageState === 'today-task') &&
           <TodayTaskList
-            key={state.columns['column-1'].id}
+            key={tasks.columns['column-1'].id}
             column={column}
-            tasks={tasks}
+            tasks={tasksArray}
             addFunc={AddTask}
             delFunc={DeleteTask}
             editFunc={EditTask}
@@ -169,7 +206,13 @@ function App(){
         }
         {
           (pageState === 'deadline-task') &&
-          <DeadlineTasks drawerOpen={drawerOpen} />
+          <DeadlineTaskList
+            drawerOpen={drawerOpen}
+            deadlines={deadlines.deadlines}
+            addFunc={AddDeadline}
+            delFunc={DeleteDeadline}
+            editFunc={EditDeadline}
+          />
         }
       </DragDropContext>
     </div>

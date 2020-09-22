@@ -23,3 +23,12 @@ export const initialRoutines = {
   ],
   routineCount: 3
 };
+
+export const initialDeadlines = {
+  deadlines: [
+    { id: "deadline-1", content: "面談", category: "仕事", deadline: "2020-10-10" },
+    { id: "deadline-2", content: "勉強", category: "趣味", deadline: "2020-12-31" },
+    { id: "deadline-3", content: "飲み会", category: "趣味", deadline: "2020-09-30" },
+  ],
+  deadlineCount: 3
+}
